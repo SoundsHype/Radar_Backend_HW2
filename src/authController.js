@@ -49,8 +49,10 @@ class authController {
 
 	async getInf(req, res){
 		try {
-			const {nickname} = req.body
-			const user = await User.findOne({nickname}, {_id: 0, nickname: 1, information: 1})
+			var authorization = req.headers.authorization.split(' ')[1],
+            decoded = jwt.verify(authorization, secret);
+            var userId = decoded.id;
+			const user = await User.findOne({_id: userId}, {_id: 0, nickname: 1, information: 1})
 			res.json(user)
 		} catch (error) {
 			console.log(error)
